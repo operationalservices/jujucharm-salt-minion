@@ -22,10 +22,11 @@ This particular package provides the worker / agent for Salt.
 
 # Usage
 
-This is a stand-alone Salt Minion charm.
+This is a subordinated Salt Minion charm.
 
 Deploy the service:
 
     juju deploy salt-minion
+    juju set salt-minion salt-master="<IP of the salt master server>"
     juju add-relation salt-minion another-service
 
