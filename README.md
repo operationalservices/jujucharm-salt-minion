@@ -20,6 +20,8 @@ This particular package provides the worker / agent for Salt.
   proven, this particular packaging in a juju charm is rather
   untested.
 
+This charm is tested with Ubuntu 14.04 (trusty).
+
 # Usage
 
 This is a subordinate salt minion charm.
