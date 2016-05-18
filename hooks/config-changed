@@ -1,0 +1,16 @@
+#!/bin/bash
+# config-changed occurs everytime a new configuration value is updated (juju set)
+
+set -e
+if [ -z $(config-get salt-master) ] ; then
+	status-set waiting "waiting for salt master ip."
+	exit
+fi
+if [ $(grep "^master: " /etc/salt/minion |wc -l) -eq 0 ] ; then
+        echo "master: $(config-get salt-master)" > /etc/salt/minion
+elif [[ $(grep "^master: " /etc/salt/minion |tr -s " "|cut -d" " -f2) != $(config-get salt-master) ]] ;then
+        sed -i "s/^master: .*\$/master: $(config-get salt-master)/" /etc/salt/minion
+	juju-log "Master-IP: $(config-get salt-master)"
+fi
+service salt-minion restart
+status-set active

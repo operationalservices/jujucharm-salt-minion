@@ -1,0 +1,32 @@
+#!/bin/bash
+# Here do anything needed to install the service
+# i.e. apt-get install -y foo  or  bzr branch http://myserver/mycode /srv/webroot
+# Make sure this hook exits cleanly and is idempotent, common problems here are
+# failing to account for a debconf question on a dependency, or trying to pull
+# from github without installing git first.
+
+$repofile = /etc/apt/sources.list.d/saltstack.list
+
+set -e
+juju-log "Adding SaltStack Repo GPG Key"
+wget -O - https://repo.saltstack.com/apt/ubuntu/14.04/amd64/latest/SALTSTACK-GPG-KEY.pub | sudo apt-key add -
+juju-log "Adding SaltStack Repository"
+if [ ! -e ${repofile} ] ; then
+	echo 'deb http://repo.saltstack.com/apt/ubuntu/14.04/amd64/latest trusty main' > ${repofile}
+fi
+apt-get update
+juju-log "Installing Salt Minion"
+apt-get install -y salt-minion
+if [ -z $(config-get salt-master) ] ; then
+        status-set waiting "waiting for salt master ip."
+        exit
+fi
+juju-log "Configure Salt Master address"
+if [ $(grep "^master: " /etc/salt/minion |wc -l) -eq 0 ] ; then
+        echo "master: $(config-get salt-master)" > /etc/salt/minion
+elif [[ $(grep "^master: " /etc/salt/minion |tr -s " "|cut -d" " -f2) != $(config-get salt-master) ]] ;then
+        sed -i "s/^master: .*\$/master: $(config-get salt-master)/" /etc/salt/minion
+        juju-log "Master-IP: $(config-get salt-master)"
+fi
+service salt-minion restart
+status-set active
