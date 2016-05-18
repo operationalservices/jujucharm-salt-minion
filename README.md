@@ -22,7 +22,7 @@ This particular package provides the worker / agent for Salt.
 
 # Usage
 
-This is a subordinated Salt Minion charm.
+This is a subordinate salt minion charm.
 
 Deploy the service:
 
