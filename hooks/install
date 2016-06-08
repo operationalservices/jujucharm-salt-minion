@@ -5,7 +5,7 @@
 # failing to account for a debconf question on a dependency, or trying to pull
 # from github without installing git first.
 
-$repofile = /etc/apt/sources.list.d/saltstack.list
+repofile = /etc/apt/sources.list.d/saltstack.list
 
 set -e
 juju-log "Adding SaltStack Repo GPG Key"
