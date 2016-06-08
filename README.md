@@ -26,9 +26,15 @@ This charm is tested with Ubuntu 14.04 (trusty).
 
 This is a subordinate salt minion charm.
 
+Get this charm:
+
+    mkdir -p ~/charms/trusty
+    cd ~/charms/trusty
+    git clone https://github.com/operationalservices/jujucharm-salt-minion.git
+
 Deploy the service:
 
-    juju deploy salt-minion
+    juju deploy local:salt-minion --repository ~/charms
     juju set salt-minion salt-master="<IP of the salt master server>"
     juju add-relation salt-minion another-service
 
