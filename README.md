@@ -32,9 +32,14 @@ Get this charm:
     cd ~/charms/trusty
     git clone https://github.com/operationalservices/jujucharm-salt-minion.git
 
-Deploy the service:
+Deploy the service on Juju 1.25:
 
     juju deploy local:salt-minion --repository ~/charms
     juju set salt-minion salt-master="<IP of the salt master server>"
     juju add-relation salt-minion another-service
 
+Deploy the service on Juju 2.0:
+
+    juju deploy ./charms/trusty/jujucharm-salt-minion/ --series xenial salt-minion-xenial
+    juju config salt-minion-xenial salt-master="<IP of the salt master server>"
+    juju add-relation salt-minion-xenial another-service
